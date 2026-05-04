@@ -1,4 +1,4 @@
-# workshop-cu
+# workshop-cu ST
 computer science  ST 
 Groupe 07 : ( Specialite : Intelligence Artificial )
 Belakhdar Abderrahmane 
