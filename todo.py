@@ -1,46 +1,96 @@
 import json
 
-FILE = "tasks.json"
+FICHIER = "todo.json"
 
-def load_tasks():
+def charger():
     try:
-        with open(FILE, "r") as f:
+        with open(FICHIER, "r") as f:
             return json.load(f)
-    except:
-        return []
+    except FileNotFoundError:
+        return {"todo": [], "doing": [], "done": []}
 
-def save_tasks(tasks):
-    with open(FILE, "w") as f:
-        json.dump(tasks, f, indent=4)
+def sauvegarder(data):
+    with open(FICHIER, "w") as f:
+        json.dump(data, f, indent=2)
 
-def add_task():
-    task = input("Nouvelle tâche: ")
-    tasks = load_tasks()
-    tasks.append(task)
-    save_tasks(tasks)
+def afficher(data):
+    colonnes = ["todo", "doing", "done"]
+    print("\n" + "=" * 50)
+    print("            TABLEAU KANBAN")
+    print("=" * 50)
+    for col in colonnes:
+        print(f"\n  [{col.upper()}]")
+        if data[col]:
+            for i, tache in enumerate(data[col], 1):
+                print(f"    {i}. {tache}")
+        else:
+            print("    (vide)")
+    print("\n" + "=" * 50)
 
-def show_tasks():
-    tasks = load_tasks()
-    for i, task in enumerate(tasks):
-        print(f"{i+1}. {task}")
+def ajouter(data):
+    tache = input("Nom de la tache: ")
+    data["todo"].append(tache)
+    sauvegarder(data)
+    print(f"Tache '{tache}' ajoutee dans TODO.")
 
-def delete_task():
-    show_tasks()
-    tasks = load_tasks()
-    index = int(input("Numéro à supprimer: ")) - 1
-    if 0 <= index < len(tasks):
-        tasks.pop(index)
-        save_tasks(tasks)
+def deplacer(data):
+    colonnes = ["todo", "doing", "done"]
+    print("Colonnes: 1-TODO  2-DOING  3-DONE")
+    try:
+        src = int(input("Depuis quelle colonne? (1-3): ")) - 1
+        col_src = colonnes[src]
+        if not data[col_src]:
+            print("Colonne vide!")
+            return
+        print(f"Taches dans {col_src.upper()}:")
+        for i, t in enumerate(data[col_src], 1):
+            print(f"  {i}. {t}")
+        idx = int(input("Numero de la tache: ")) - 1
+        dest = int(input("Vers quelle colonne? (1-3): ")) - 1
+        col_dest = colonnes[dest]
+        tache = data[col_src].pop(idx)
+        data[col_dest].append(tache)
+        sauvegarder(data)
+        print(f"'{tache}' deplacee vers {col_dest.upper()}.")
+    except (ValueError, IndexError):
+        print("Choix invalide.")
 
-while True:
-    print("\n1. Ajouter\n2. Afficher\n3. Supprimer\n4. Quitter")
-    choice = input("Choix: ")
+def supprimer(data):
+    colonnes = ["todo", "doing", "done"]
+    print("Colonnes: 1-TODO  2-DOING  3-DONE")
+    try:
+        src = int(input("Depuis quelle colonne? (1-3): ")) - 1
+        col = colonnes[src]
+        if not data[col]:
+            print("Colonne vide!")
+            return
+        for i, t in enumerate(data[col], 1):
+            print(f"  {i}. {t}")
+        idx = int(input("Numero de la tache a supprimer: ")) - 1
+        tache = data[col].pop(idx)
+        sauvegarder(data)
+        print(f"'{tache}' supprimee.")
+    except (ValueError, IndexError):
+        print("Choix invalide.")
 
-    if choice == "1":
-        add_task()
-    elif choice == "2":
-        show_tasks()
-    elif choice == "3":
-        delete_task()
-    elif choice == "4":
-        break
+def main():
+    data = charger()
+    while True:
+        afficher(data)
+        print("\n1. Ajouter une tache")
+        print("2. Deplacer une tache")
+        print("3. Supprimer une tache")
+        print("4. Quitter")
+        choix = input("\nChoix: ")
+        if choix == "1":
+            ajouter(data)
+        elif choix == "2":
+            deplacer(data)
+        elif choix == "3":
+            supprimer(data)
+        elif choix == "4":
+            print("Au revoir!")
+            break
+
+if __name__ == "__main__":
+    main()
