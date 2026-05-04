@@ -80,9 +80,9 @@ def main():
    # la Boucle principale
     while True:
         afficher(data)
-        print("\n1. Ajouter une tache")
-        print("2. Deplacer une tache")
-        print("3. Supprimer une tache")
+        print("\n1. Ajouter une tâche")
+        print("2. Déplacer une tâche")
+        print("3. Supprimer une tâche")
         print("4. Quitter")
         choix = input("\nChoix: ")
         if choix == "1":
