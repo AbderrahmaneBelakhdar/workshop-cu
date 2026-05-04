@@ -75,6 +75,7 @@ def supprimer(data):
 
 def main():
     data = charger()
+   # la Boucle principale
     while True:
         afficher(data)
         print("\n1. Ajouter une tache")
