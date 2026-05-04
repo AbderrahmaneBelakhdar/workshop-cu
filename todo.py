@@ -1,11 +1,12 @@
 import json
 
 FICHIER = "todo.json"
+# Charger les données depuis le fichier JSON
 
 def charger():
     try:
         with open(FICHIER, "r") as f:
-            return json.load(f)
+            return json.load(f)    # lire les données existantes
     except FileNotFoundError:
         return {"todo": [], "doing": [], "done": []}
 
@@ -21,6 +22,7 @@ def afficher(data):
     for col in colonnes:
         print(f"\n  [{col.upper()}]")
         if data[col]:
+             # afficher chaque tâche avec un numéro
             for i, tache in enumerate(data[col], 1):
                 print(f"    {i}. {tache}")
         else:
