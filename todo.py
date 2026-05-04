@@ -61,7 +61,7 @@ def supprimer(data):
     colonnes = ["todo", "doing", "done"]
     print("Colonnes: 1-TODO 2-DOING 3-DONE")
     try:
-        src = int(input("Depuis quelle colonne? (1-3): "))
+        src = int(input("Depuis quelle colonne? (1-3): ")) - 1
         col = colonnes[src]
         if not data[col]:
             print("Colonne vide!")
