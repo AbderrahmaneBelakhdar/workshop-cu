@@ -59,7 +59,7 @@ def deplacer(data):
 
 def supprimer(data):
     colonnes = ["todo", "doing", "done"]
-    print("Colonnes: 1-TODO  2-DOING  3-DONE")
+    print("Colonnes: 1-TODO 2-DOING 3-DONE")
     try:
         src = int(input("Depuis quelle colonne? (1-3): ")) - 1
         col = colonnes[src]
